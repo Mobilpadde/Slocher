@@ -1,0 +1,30 @@
+// compileCompressed: slocher.css
+body{
+    #slocher{
+        #slocher-loc:after{
+            content: " (esitmated)";
+            font-size: 0.5em;
+        }
+
+        #slocher-languages{
+            list-style-type: none;
+            padding: 5px 5px 0 10px;
+
+            .slocher-visual-parent{
+                height: 15px;
+                float: right;
+
+                .slocher-visual{
+                    background: #eee;
+                    height: 100%;
+                    border-left: 2px solid darken(#eee, 5%);
+                    float: right;
+                }
+            }
+        }
+
+        #slocher-total{
+            font-weight: 300;
+        }
+    }
+}
