@@ -12,20 +12,30 @@
         if(addTo != null) addTo.appendChild(elm);
 
         return elm;
-    }, getSloc = function(user, project, cb){
-        if(languages == null){
-            var xhr = new XMLHttpRequest();
+    }, $j = function(url, cb){
+        var xhr = new XMLHttpRequest();
 
-            xhr.onload = function(data){
-                response = JSON.parse(data.target.responseText);
-                languages = response;
-                return cb(response);
+        xhr.onload = function(data){
+            cb(JSON.parse(data.target.responseText));
+        }
+
+        xhr.open("GET", url);
+        xhr.send();
+    }, doColourStuff = function(){
+        $j("https://raw.githubusercontent.com/ozh/github-colors/master/colors.json", function(colours){
+            var stylesheet = $a("style", "slocher-stylesheet", null, null, null, null, $("head"));
+            for(var key in colours){
+                stylesheet.innerHTML += "body #slocher li:hover .slocher-" + key.replace(/[^a-z0-9]/ig, "") +
+                "{background:" + colours[key].color + " !important;border-left-width:0px !important;}";
             }
-
-            xhr.open("GET", "https://api.github.com/repos/" + user + "/" + project + "/languages");
-            xhr.send();
-        }else{
-            cb(languages);
+        });
+    }, getBytes = function(user, project, cb){
+        if(languages != null) cb(languages);
+        else{
+            $j("https://api.github.com/repos/" + user + "/" + project + "/languages", function(langs){
+                languages = langs;
+                cb(langs);
+            });
         }
     }, addToNav = function(){
         if(tab == null){
@@ -47,7 +57,7 @@
         $("#js-repo-pjax-container").innerHTML = "";
         $("#js-repo-pjax-container").appendChild(tabs);
 
-        getSloc(path[0], path[1], function(languages){
+        getBytes(path[0], path[1], function(languages){
             if(!$("#slocher")){
                 var holder = $a("div", "slocher", "graph-filter clearfix", null, null, null, $("#js-repo-pjax-container")),
                     h3 = $a("h3", "slocher-loc", "js-date-range", null, null, "Lines of Code", holder),
@@ -76,7 +86,7 @@
                 var i = 0;
                 for(key in languages){
                     var vParent = $a("span", null, "slocher-visual-parent", null, null, null, lis[i]),
-                        visual = $a("span", null, "slocher-visual", null, null, null, vParent);
+                        visual = $a("span", null, "slocher-visual slocher-" + key.replace(/[^a-z0-9]/ig, ""), null, null, null, vParent);
 
                     vParent.style.width = (lis[i++].offsetWidth - widest) + "px";
                     visual.style.width = ((languages[key] / bytesPerLine) / (lines / bytesPerLine) * 100) + "%";
@@ -87,6 +97,8 @@
             }
         });
     }, tab = null, languages = null;
+
+    setTimeout(doColourStuff, 0);
 
     window.addEventListener("popstate", addToNav);
 

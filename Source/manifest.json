@@ -3,7 +3,7 @@
 
     "name": "Slocher",
 	"description": "How many lines does this github-project contain?",
-	"version": "0.0.1",
+	"version": "0.0.2",
 
 	"author": "Mads Cordes",
 	"icons": {

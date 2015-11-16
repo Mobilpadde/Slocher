@@ -17,8 +17,10 @@ body{
                 .slocher-visual{
                     background: #eee;
                     height: 100%;
-                    border-left: 2px solid darken(#eee, 5%);
+                    border-left: 0px solid darken(#eee, 5%);
+                    border-left-width: 2px;
                     float: right;
+                    transition: background 150ms ease-in-out, border-left-width 150ms ease-in-out;
                 }
             }
         }
