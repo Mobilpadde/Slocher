@@ -1,6 +1,13 @@
 // compileCompressed: slocher.css
 body{
+    #slocher-link{
+        border-top-right-radius: 3px;
+        border-bottom-right-radius: 3px;
+    }
+
     #slocher{
+        margin-top: 55px;
+
         #slocher-loc:after{
             content: " (esitmated)";
             font-size: 0.5em;

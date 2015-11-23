@@ -17,9 +17,11 @@
         }
     }, addToNav = function(){
         if(tab == null){
-            tab = $.create("a", "slocher-link", "js-selected-navigation-item tabnav-tab", "tab", "#slocher", "Lines of Code", $.find(".tabnav-tabs"));
+            tab = $.create("a", "slocher-link", "js-selected-navigation-item subnav-item", "tab", "#slocher", "Lines of Code",
+                $.find("#js-repo-pjax-container .repository-content .subnav"));
+
             tab.onclick = function(){
-                var selected = $.find(".tabnav .selected");
+                var selected = $.find(".subnav .selected");
                 selected.className = selected.className.replace(" selected", "");
                 selected.removeAttribute("aria-selected");
                 tab.className += " selected";
@@ -29,21 +31,23 @@
 
         if(window.location.hash == "#slocher") tab.click();
     }, addTabData = function(){
-        var tabs = $.find(".tabnav")
+        var tabs = $.find("#js-repo-pjax-container .subnav"),
             path = window.location.pathname.split("/").splice(1);
 
-        $.find("#js-repo-pjax-container").innerHTML = "";
-        $.find("#js-repo-pjax-container").appendChild(tabs);
+        $.find("#js-repo-pjax-container .repository-content").innerHTML = "";
+        $.find("#js-repo-pjax-container .repository-content").appendChild(tabs);
 
         getBytes(path[0], path[1], function(languages){
             if(!$.find("#slocher")){
-                var holder = $.create("div", "slocher", "graph-filter clearfix", null, null, null, $.find("#js-repo-pjax-container")),
+                var holder = $.create("div", "slocher", "graph-filter clearfix", null, null, null, $.find("#js-repo-pjax-container .repository-content .subnav")),
                     h3 = $.create("h3", "slocher-loc", "js-date-range", null, null, "Lines of Code", holder),
                     ul = $.create("ul", "slocher-languages", null, null, null, null, holder),
                     lines = 0,
                     bytesPerLine = 40,
                     widest = 0,
                     lis = [];
+
+                console.log(holder);
 
                 for(var key in languages){ lines += languages[key]; }
 
